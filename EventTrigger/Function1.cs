@@ -3,24 +3,32 @@ using Azure.Messaging.EventHubs;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
-namespace EventTrigger
+namespace PatientEventTrigger
 {
-    public class Function1
+    public class PatientFunction
     {
-        private readonly ILogger<Function1> _logger;
+        private readonly ILogger<PatientFunction> _logger;
 
-        public Function1(ILogger<Function1> logger)
+        public PatientFunction(ILogger<PatientFunction> logger)
         {
             _logger = logger;
         }
 
-        [Function(nameof(Function1))]
-        public void Run([EventHubTrigger("samples-workitems", Connection = "dub")] EventData[] events)
+        [Function(nameof(PatientFunction))]
+        public void Run([EventHubTrigger("patient-events", Connection = "EventHubConnection")] EventData[] events)
         {
-            foreach (EventData @event in events)
+            // Iterate through each patient event received from the Event Hub
+            foreach (EventData eventData in events)
             {
-                _logger.LogInformation("Event Body: {body}", @event.Body);
-                _logger.LogInformation("Event Content-Type: {contentType}", @event.ContentType);
+                // Log the patient event details
+                string eventBody = eventData.Body.ToString();
+                string contentType = eventData.ContentType;
+
+                _logger.LogInformation("Received Patient Event: {body}", eventBody);
+                _logger.LogInformation("Event Content-Type: {contentType}", contentType);
+
+                // You can add additional processing logic here, such as parsing the event body
+                // and saving patient information to a database or triggering other workflows.
             }
         }
     }
