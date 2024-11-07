@@ -1,0 +1,36 @@
+﻿@model IEnumerable<CommerceApp.Models.Patient>
+
+<h2>Patients</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Patient</a>
+    <a asp-action="ProcessPatientData" class="btn btn-secondary">Process Patient Data</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Checkup Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var patient in Model)
+        {
+            <tr>
+                <td>@patient.Name</td>
+                <td>@patient.Age</td>
+                <td>@patient.Gender</td>
+                <td>@(patient.IsCheckupOverdue ? "Overdue" : "Up to date")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@patient.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@patient.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@patient.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

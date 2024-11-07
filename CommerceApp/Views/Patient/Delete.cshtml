@@ -1,0 +1,25 @@
+﻿@model CommerceApp.Models.Patient
+
+<h2>Delete Patient</h2>
+
+<div>
+    <h4>Are you sure you want to delete this?</h4>
+    <div>
+        <h5>@Model.Name</h5>
+        <p>Gender: @Model.Gender</p>
+        <p>Date of Birth: @Model.DateOfBirth.ToShortDateString()</p>
+        <p>Contact Number: @Model.ContactNumber</p>
+        <p>Email: @Model.Email</p>
+        <p>Vital Signs: @Model.VitalSigns</p>
+    </div>
+</div>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <input type="submit" value="Delete" class="btn btn-danger" />
+    </div>
+</form>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -14,5 +14,6 @@ namespace CommerceApp.Data
         }
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<Patient> Patients { get; set; }
     }
 }

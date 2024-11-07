@@ -1,0 +1,91 @@
+﻿@model CommerceApp.Models.DashboardViewModel
+
+<div class="container">
+    <h2>Admin Dashboard</h2>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">@TempData["Message"]</div>
+    }
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Total Patients</h5>
+                    <p>@Model.TotalPatients</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Patients Needing Checkup</h5>
+                    <p>@Model.PatientsNeedingCheckup</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Average Patient Age</h5>
+                    <p>@Model.AveragePatientAge.ToString("F1")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Gender Distribution</h4>
+            <canvas id="genderChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h4>Age Group Distribution</h4>
+            <canvas id="ageGroupChart"></canvas>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="SendCheckupReminders" class="btn btn-primary">Send Checkup Reminders</a>
+        <a asp-action="ExportPatientData" class="btn btn-secondary">Export Patient Data</a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Gender Distribution Chart
+        var genderCtx = document.getElementById('genderChart').getContext('2d');
+        var genderChart = new Chart(genderCtx, {
+            type: 'pie',
+            data: {
+                labels: [@Html.Raw(string.Join(",", Model.GenderDistribution.Select(g => $"'{g.Gender}'")))],
+                datasets: [{
+                    data: [@string.Join(",", Model.GenderDistribution.Select(g => g.Count))],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                }]
+            }
+        });
+
+        // Age Group Distribution Chart
+        var ageGroupCtx = document.getElementById('ageGroupChart').getContext('2d');
+        var ageGroupChart = new Chart(ageGroupCtx, {
+            type: 'bar',
+            data: {
+                labels: [@Html.Raw(string.Join(",", Model.AgeGroups.Select(g => $"'{g.AgeGroup}'")))],
+                datasets: [{
+                    label: 'Number of Patients',
+                    data: [@string.Join(",", Model.AgeGroups.Select(g => g.Count))],
+                    backgroundColor: '#36A2EB'
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+}

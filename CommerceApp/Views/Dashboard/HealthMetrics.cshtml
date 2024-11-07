@@ -1,0 +1,54 @@
+﻿@model CommerceApp.Models.HealthMetricsViewModel
+
+<div class="container">
+    <h2>Health Metrics</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Checkups by Month</h4>
+            <canvas id="checkupsByMonthChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h4>Overdue Checkups by Age Group</h4>
+            <canvas id="overdueCheckupsChart"></canvas>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Checkups by Month Chart
+        var checkupsCtx = document.getElementById('checkupsByMonthChart').getContext('2d');
+        var checkupsChart = new Chart(checkupsCtx, {
+            type: 'bar',
+            data: {
+                labels: [@Html.Raw(string.Join(",", Model.CheckupsByMonth.Keys.Select(k => $"'{k}'")))],
+                datasets: [{
+                    label: 'Number of Checkups',
+                    data: [@string.Join(",", Model.CheckupsByMonth.Values)],
+                    backgroundColor: '#36A2EB'
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Overdue Checkups by Age Group Chart
+        var overdueCtx = document.getElementById('overdueCheckupsChart').getContext('2d');
+        var overdueChart = new Chart(overdueCtx, {
+            type: 'pie',
+            data: {
+                labels: [@Html.Raw(string.Join(",", Model.OverdueCheckupsByAgeGroup.Keys.Select(k => $"'{k}'")))],
+                datasets: [{
+                    data: [@string.Join(",", Model.OverdueCheckupsByAgeGroup.Values)],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+                }]
+            }
+        });
+    </script>
+}

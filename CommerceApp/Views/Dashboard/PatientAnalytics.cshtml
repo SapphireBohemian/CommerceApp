@@ -1,0 +1,50 @@
+﻿@model List<CommerceApp.Models.CheckupDataViewModel>
+
+<div class="container">
+    <h2>Patient Analytics</h2>
+    <canvas id="checkupChart"></canvas>
+
+    <h3 class="mt-4">Checkup Data</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Date.ToString("yyyy-MM-dd")</td>
+                    <td>@item.Count</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        var ctx = document.getElementById('checkupChart').getContext('2d');
+        var checkupChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [@Html.Raw(string.Join(",", Model.Select(d => $"'{d.Date.ToString("yyyy-MM-dd")}'").ToList()))],
+                datasets: [{
+                    label: 'Number of Checkups',
+                    data: [@string.Join(",", Model.Select(d => d.Count))],
+                    borderColor: '#36A2EB',
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+}
